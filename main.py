@@ -60,25 +60,29 @@ class Fruit(pygame.sprite.Sprite):
 
 class Mixer:
 
-    def __init__(self):
+    def __init__(self, has_soundcard=False):
+        self.has_soundcard = has_soundcard
 
-        self.fx = {
-            "jump": pygame.mixer.Sound("./sfx/jump.wav"),
-            "crunch": pygame.mixer.Sound("./sfx/crunch.wav"),
-            "flip": pygame.mixer.Sound("./sfx/flip.wav"),
-            "no": pygame.mixer.Sound("./sfx/no.wav"),
+        if has_soundcard:
+            self.fx = {
+                "jump": pygame.mixer.Sound("./sfx/jump.wav"),
+                "crunch": pygame.mixer.Sound("./sfx/crunch.wav"),
+                "flip": pygame.mixer.Sound("./sfx/flip.wav"),
+                "no": pygame.mixer.Sound("./sfx/no.wav"),
 
-        }
+            }
 
         #~ self.track = pygame.mixer.Sound("./sfx/track_1.wav")
 
     def play_fx(self, name):
-        self.fx[name].set_volume(SETTINGS["fx_volume"]/100.0)
-        self.fx[name].play()
+        if self.has_soundcard:
+            self.fx[name].set_volume(SETTINGS["fx_volume"]/100.0)
+            self.fx[name].play()
 
     def play_track(self):
-        self.track.set_volume(SETTINGS["music_volume"]/100.0)
-        self.track.play()
+        if self.has_soundcard:
+            self.track.set_volume(SETTINGS["music_volume"]/100.0)
+            self.track.play()
 
     def set_music_volume(self, value):
         pass
@@ -180,7 +184,11 @@ class Game:
 
         # pygame init
         pygame.init()
-        pygame.mixer.init()
+        try:
+            pygame.mixer.init()
+            self.has_soundcard = True
+        except:
+            self.has_soundcard = False
         pygame.mouse.set_visible(0)
 
         # init "buffer" and real screen
@@ -189,7 +197,7 @@ class Game:
         pygame.display.set_caption("Super Fruit Pie")
 
         # load game font
-        self.font = pygame.font.Font("./font/game_over.ttf", 120)
+        self.font = pygame.font.Font("font/game_over.ttf", 120)
 
         # this is a bit more than score ..
         # I use it to show some info like pause, resume/gameover
@@ -207,7 +215,7 @@ class Game:
         }
 
         # create mixer for fx/music
-        self.mixer = Mixer()
+        self.mixer = Mixer(self.has_soundcard)
 
         # this is the main game menu
         self.menu = menu.Menu(self)

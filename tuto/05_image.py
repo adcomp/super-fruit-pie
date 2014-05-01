@@ -83,9 +83,9 @@ class Player(pygame.sprite.Sprite):
         self.change_y += .4
 
         # See if we are on the ground.
-        if self.rect.y >= HEIGHT-48 and self.change_y >= 0:
+        if self.rect.y >= HEIGHT-30 and self.change_y >= 0:
             self.change_y = 0
-            self.rect.y = HEIGHT-48
+            self.rect.y = HEIGHT-30
             self.frame_since_collision = 0
             self.jump_ok = True
 

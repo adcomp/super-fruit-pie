@@ -1,3 +1,9 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# David Art <david.madbox@gmail.com>
+# Program Arcade Games With Python And Pygame - Build a Platformer
+# http://programarcadegames.com
 
 import pygame
 
